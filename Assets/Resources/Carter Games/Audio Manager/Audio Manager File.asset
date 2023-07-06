@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ae0c8eafd7263429865ae0f6fe29e6, type: 3}
+  m_Name: Audio Manager File
+  m_EditorClassIdentifier: 
+  tabPos: 0
+  audioMixer: []
+  soundPrefab: {fileID: 322064603624763291, guid: f97cb5ab9dca8bd488116e0ffc057e10, type: 3}
+  isPopulated: 1
+  directory:
+  - Assets/Lo-fi Chill Beats Music Pack
+  - Assets/SFX
+  library:
+  - key: LCB_Milkyway_Tea_Shop_noAmb_Loop
+    value: {fileID: 8300000, guid: 337b86c785c8649ba88cddd3b545fefe, type: 3}
+  - key: 186669__fordps3__computer-boop
+    value: {fileID: 8300000, guid: 9be3f9e78a25655489bce893b8bc753f, type: 3}
+  - key: back-button
+    value: {fileID: 8300000, guid: 7feca5566558ea94fa259f269d21bb9b, type: 3}
+  - key: button-click-1
+    value: {fileID: 8300000, guid: 735f867972ce381449aa1941f855e21f, type: 3}
+  - key: confirm-button
+    value: {fileID: 8300000, guid: 4f772a09016c117478cf984ae2ae98f3, type: 3}
+  - key: level-win
+    value: {fileID: 8300000, guid: 907e03b1f8323ab418f2e9fb3cde2909, type: 3}
+  - key: open-button-1
+    value: {fileID: 8300000, guid: 1365d580f049c1c43880dd9be1ee8bec, type: 3}
+  - key: rhodesmas-level-up-01
+    value: {fileID: 8300000, guid: 36ff862303106104e830f9c73e3d4e95, type: 3}
+  - key: short-whistle
+    value: {fileID: 8300000, guid: ca265ca85e829a944b33daeefe4127e3, type: 3}
+  - key: vs-pop-4
+    value: {fileID: 8300000, guid: 2162419b9abff1741865584f11713f39, type: 3}
+  - key: wrong-answer
+    value: {fileID: 8300000, guid: 65c9cf01c96021d48b20c2f6604563f2, type: 3}

@@ -1,0 +1,1 @@
+{"userIndex":1,"lastActiveUser":1,"username":"","masterVolume":0.0,"bgmVolume":0.0,"sfxVolume":0.0,"game1":false,"game2":false,"game3":false,"game4":false,"game5":false,"game6":false,"game7":false,"game8":false,"game9":false,"game10":false}
