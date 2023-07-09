@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuControlinator : MonoBehaviour{
     [SerializeField] string filename;
+    [SerializeField] AudioSettingsHandleinator audioSettings;
 
     public GameObject PopupWindows;
     public GameObject SelectUserPopup;
@@ -14,6 +15,7 @@ public class MainMenuControlinator : MonoBehaviour{
     public GameObject ExitPopup;
     public GameObject LevelSelect;
     public static AudioManager audioManager;
+    public static MusicPlayer musicPlayer;
 
     public bool isPopupWindowsShown;
     public bool isSelectUserShown;
@@ -30,7 +32,6 @@ public class MainMenuControlinator : MonoBehaviour{
     public bool game8;
     public bool game9;
     public bool game10;
-    public float masterVolume;
     public float bgmVolume;
     public float sfxVolume;
     public string username;
@@ -55,7 +56,6 @@ public class MainMenuControlinator : MonoBehaviour{
             game8 = u.hasGame8;
             game9 = u.hasGame9;
             game10 = u.hasGame10;
-            masterVolume = u.masterVolume;
             bgmVolume = u.bgmVolume;
             sfxVolume = u.sfxVolume;
         }
@@ -70,11 +70,21 @@ public class MainMenuControlinator : MonoBehaviour{
         AudioSettingsPopup.SetActive(isAudioSettingsShown);
         ExitPopup.SetActive(isExitPopupShown);
 
-        if (audioManager == null) {
+        //audioSettings = FindObjectOfType<AudioSettingsHandleinator>();
+        audioSettings.BGMSlider.value = bgmVolume;
+        audioSettings.SFXSlider.value = sfxVolume;
+
+        MusicPlayer.instance.PlayTrack();
+        MusicPlayer.instance.SetVolume(bgmVolume);
+        /*if (audioManager == null) {
             audioManager = FindObjectOfType<AudioManager>();
-            DontDestroyOnLoad(audioManager.gameObject);
-            audioManager.Play("LCB_Milkyway_Tea_Shop_noAmb_Loop", loop: true);
+            DontDestroyOnLoad(audioManager);
         }
+        if(musicPlayer = null) {
+            musicPlayer = FindObjectOfType<MusicPlayer>();
+            DontDestroyOnLoad(musicPlayer); //"LCB_Milkyway_Tea_Shop_noAmb_Loop"
+
+        }*/
     }
 
     void Update(){
@@ -85,42 +95,42 @@ public class MainMenuControlinator : MonoBehaviour{
 
     public void RunGame1() {
         Debug.Log("Running ping pong");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("PingPong");
     }
     public void RunGame2() {
         Debug.Log("Selecting laser level");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Laser1");
     }
     public void RunGame3() {
         Debug.Log("Running game 3");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Laser2");
     }
     public void RunGame4() {
         Debug.Log("Running game 4");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Laser3");
     }
     public void RunGame5() {
         Debug.Log("Running game 5");
-        audioManager.Play("button-click-1", loop: false);
+        audioManager.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Laser4");
     }
     public void RunGame6() {
         Debug.Log("Running game 6");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Laser5");
     }
     public void RunGame7() {
         Debug.Log("Running sequence");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Sequence");
     }
     public void RunGame8() {
         Debug.Log("Running sorting");
-        audioManager.Play("button-click-1", loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Sorting");
     }
     public void RunGame9() {
@@ -133,44 +143,36 @@ public class MainMenuControlinator : MonoBehaviour{
     public void PopupWindowsToggle() {
         isPopupWindowsShown = !isPopupWindowsShown;
         PopupWindows.SetActive(isPopupWindowsShown);
-        audioManager.Play("vs-pop-4", loop: false);
+        AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
     public void AudioSettingsToggle() {
         Debug.Log("Toggling audio settings");
         PopupWindowsToggle();
         isAudioSettingsShown = !isAudioSettingsShown;
         AudioSettingsPopup.SetActive(isAudioSettingsShown);
-        audioManager.Play("vs-pop-4", loop: false);
+        AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
     public void LevelSelectToggle() {
         PopupWindowsToggle();
         isLevelSelectShown = !isLevelSelectShown;
         LevelSelect.SetActive(isLevelSelectShown);
-        audioManager.Play("vs-pop-4", loop: false);
+        AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
     public void SaveAudioSettings() {
         SaveToFile();
         AudioSettingsToggle();
-        audioManager.Play("confirm-button", loop: false);
+        AudioManager.instance.Play("confirm-button", volume: sfxVolume, loop: false);
     }
     public void DevButton() {
         Debug.Log("Going to developer's website");
-        audioManager.Play("open-button-1", loop: false);
-    }
-    public void SelectUserToggle() {
-        Debug.Log("Toggling user selection");
-        PopupWindowsToggle();
-        isSelectUserShown = !isSelectUserShown;
-        SelectUserPopup.SetActive(isSelectUserShown);
-        audioManager.Play("vs-pop-4", loop: false);
-        //if shown, load user data
+        AudioManager.instance.Play("open-button-1", volume: sfxVolume, loop: false);
     }
 	public void ExitDialogToggle() {
         Debug.Log("Toggling exit dialog");
         PopupWindowsToggle();
         isExitPopupShown = !isExitPopupShown;
         ExitPopup.SetActive(isExitPopupShown);
-        audioManager.Play("vs-pop-4", loop: false);
+        AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
     public void QuitApp() {
         Application.Quit();
@@ -180,7 +182,7 @@ public class MainMenuControlinator : MonoBehaviour{
 	}
 	public void SaveToFile() {
         userdata.Clear();
-        userdata.Add(new UserData(username, game1, game2, game3, game4, game5, game6, game7, game8, game9, game10, masterVolume, bgmVolume, sfxVolume));
+        userdata.Add(new UserData(username, game1, game2, game3, game4, game5, game6, game7, game8, game9, game10, bgmVolume, sfxVolume));
         SaveData.SaveToJSON(userdata, filename);
         Debug.Log("data saved");
     }

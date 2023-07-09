@@ -16,7 +16,7 @@ public class UserData {
     public float sfxVolume;
 
 	public UserData(string username, bool game1, bool game2, bool game3, bool game4, bool game5, bool game6, bool game7,
-				 bool game8, bool game9, bool game10, float masterVol, float bgmVol, float sfxVol) {
+				 bool game8, bool game9, bool game10, float bgmVol, float sfxVol) {
         playerName = username;
         hasGame1 = game1;
         hasGame2 = game2;
@@ -28,7 +28,6 @@ public class UserData {
         hasGame8 = game8;
         hasGame9 = game9;
         hasGame10 = game10;
-        masterVolume = masterVol;
         bgmVolume = bgmVol;
         sfxVolume = sfxVol;
     }
