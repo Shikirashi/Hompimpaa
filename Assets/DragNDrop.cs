@@ -1,20 +1,61 @@
  using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class DragNDrop : MonoBehaviour{
+public class DragNDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IInitializePotentialDragHandler{
 
+    public SortingGameManager sorting;
     public float minDist;
     public GameObject target;
     public GameObject SpotParent;
     public int itemIndex;
+
+    [SerializeField] private Canvas canvas;
+    private RectTransform rectTransform;
+    private CanvasGroup canvasGroup;
+
+	private void Awake() {
+        rectTransform = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
+    }
     void Start() {
-        ResizeCollider();
-        itemIndex = transform.GetSiblingIndex();
-        minDist = FindObjectOfType<SortingGameManager>().minimumDistance;
+        //ResizeCollider();
+        sorting = FindObjectOfType<SortingGameManager>();
     }
 
+    void ResizeCollider() {
+        BoxCollider2D boxcol = GetComponent<BoxCollider2D>();
+        RectTransform rect = GetComponent<RectTransform>();
+        boxcol.size = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData) {
+        Debug.Log("begin drag");
+        canvasGroup.alpha = .6f;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnDrag(PointerEventData eventData) {
+        Debug.Log("on drag");
+        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+	}
+
+	public void OnEndDrag(PointerEventData eventData) {
+        Debug.Log("end drag");
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+	public void OnPointerDown(PointerEventData eventData) {
+        Debug.Log("on click");
+    }
+
+	public void OnInitializePotentialDrag(PointerEventData eventData) {
+        eventData.useDragThreshold = false;
+	}
+
+    /*
 	public void ItemDrag() {
         transform.position = Input.mousePosition;
     }
@@ -38,6 +79,8 @@ public class DragNDrop : MonoBehaviour{
 			else {
                 transform.position = SpotParent.transform.GetChild(itemIndex).transform.position;
 			}
+            Debug.Log("checking order");
+            sorting.CheckOrder();
         }
     }
 
@@ -60,10 +103,5 @@ public class DragNDrop : MonoBehaviour{
         }
         return closest;
     }
-
-    void ResizeCollider() {
-        BoxCollider2D boxcol = GetComponent<BoxCollider2D>();
-        RectTransform rect = GetComponent<RectTransform>();
-        boxcol.size = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y);
-    }
+*/
 }

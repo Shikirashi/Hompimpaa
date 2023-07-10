@@ -2,29 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class TargetScript : MonoBehaviour{
+public class TargetScript : MonoBehaviour, IDropHandler{
 
     public bool hasImage;
-    public GameObject heldImage;
-
-    void Start(){
-        //hasImage = false;
-        heldImage = null;
-        GetComponent<Image>().enabled = true;
-        ResizeCollider();
-    }
-
-	private void OnTriggerExit2D(Collider2D collision) {
-		if (collision.tag == "Image") {
-            hasImage = false;
-            heldImage = null;
-            GetComponent<Image>().enabled = true;
+	//public GameObject heldImage;
+	private void Start() {
+        hasImage = false;
+	}
+	public void OnDrop(PointerEventData eventData) {
+        Debug.Log("on drop");
+        if (eventData.pointerDrag != null) {
+            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+            hasImage = true;
         }
     }
-    void ResizeCollider() {
-        BoxCollider2D boxcol = GetComponent<BoxCollider2D>();
-        RectTransform rect = GetComponent<RectTransform>();
-        boxcol.size = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y);
-    }
+
 }

@@ -354,8 +354,8 @@ MonoBehaviour:
   playOnAwake: 1
   volume: 1
   pitch: 1
-  transitionLength: 1
-  introTransition: 1
+  transitionLength: 5
+  introTransition: 0
   showSource: 0
 --- !u!4 &57396998
 Transform:

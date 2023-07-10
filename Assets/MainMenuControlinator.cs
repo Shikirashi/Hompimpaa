@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuControlinator : MonoBehaviour{
     [SerializeField] string filename;
-    [SerializeField] AudioSettingsHandleinator audioSettings;
+    public AudioSettingsHandleinator audioSettings;
 
     public GameObject PopupWindows;
     public GameObject SelectUserPopup;
@@ -70,12 +70,12 @@ public class MainMenuControlinator : MonoBehaviour{
         AudioSettingsPopup.SetActive(isAudioSettingsShown);
         ExitPopup.SetActive(isExitPopupShown);
 
-        //audioSettings = FindObjectOfType<AudioSettingsHandleinator>();
-        audioSettings.BGMSlider.value = bgmVolume;
-        audioSettings.SFXSlider.value = sfxVolume;
+        audioSettings = AudioSettingsPopup.GetComponent<AudioSettingsHandleinator>();
+        //audioSettings.BGMSlider.value = bgmVolume;
+        //audioSettings.SFXSlider.value = sfxVolume;
 
-        MusicPlayer.instance.PlayTrack();
         MusicPlayer.instance.SetVolume(bgmVolume);
+        MusicPlayer.instance.PlayTrack();
         /*if (audioManager == null) {
             audioManager = FindObjectOfType<AudioManager>();
             DontDestroyOnLoad(audioManager);
