@@ -54,3 +54,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: sky
+    uniqueID: 422938843
+    locked: 0
+  - name: clouds
+    uniqueID: 3615043381
+    locked: 0
+  - name: trees
+    uniqueID: 1669394279
+    locked: 0
+  - name: chicken
+    uniqueID: 4209567123
+    locked: 0
+  - name: deer
+    uniqueID: 513846589
+    locked: 0
+  - name: ground
+    uniqueID: 593903147
+    locked: 0

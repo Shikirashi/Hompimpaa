@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using TMPro;
 using CarterGames.Assets.AudioManager;
 using UnityEngine.SceneManagement;
 
@@ -9,11 +10,8 @@ public class MainMenuControlinator : MonoBehaviour{
     [SerializeField] string filename;
     public AudioSettingsHandleinator audioSettings;
 
-    public GameObject PopupWindows;
-    public GameObject SelectUserPopup;
-    public GameObject AudioSettingsPopup;
-    public GameObject ExitPopup;
-    public GameObject LevelSelect;
+    public GameObject PopupWindows, SelectUserPopup, AudioSettingsPopup, ExitPopup, LevelSelect;
+    public TextMeshProUGUI titleTxt, tutorialTxt;
     public static AudioManager audioManager;
     public static MusicPlayer musicPlayer;
 
@@ -174,6 +172,10 @@ public class MainMenuControlinator : MonoBehaviour{
         ExitPopup.SetActive(isExitPopupShown);
         AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
+    private void ShowTutorial(string title, string tutorial) {
+        titleTxt.text = title;
+        tutorialTxt.text = tutorial;
+	}
     public void QuitApp() {
         Application.Quit();
 	}
