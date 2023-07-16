@@ -10,10 +10,8 @@ public class MainMenuControlinator : MonoBehaviour{
     [SerializeField] string filename;
     public AudioSettingsHandleinator audioSettings;
 
-    public GameObject PopupWindows, SelectUserPopup, AudioSettingsPopup, ExitPopup, LevelSelect;
+    public GameObject popupWindows, AudioSettingsPopup, ExitPopup, LevelSelect, tutorials, laserTutorial;
     public TextMeshProUGUI titleTxt, tutorialTxt;
-    public static AudioManager audioManager;
-    public static MusicPlayer musicPlayer;
 
     public bool isPopupWindowsShown;
     public bool isSelectUserShown;
@@ -35,14 +33,15 @@ public class MainMenuControlinator : MonoBehaviour{
     public string username;
 
     private List<UserData> userdata = new List<UserData>();
-    void Start(){
-        Debug.Log(this.gameObject.name);
-		if (!Directory.Exists(Application.persistentDataPath + "/Saves/")) {
+    private int gameToRun;
+
+	private void Awake() {
+        if (!Directory.Exists(Application.persistentDataPath + "/Saves/")) {
             Directory.CreateDirectory(Application.persistentDataPath + "/Saves/");
-		}
+        }
 
         userdata = SaveData.ReadFromJSON<UserData>(filename);
-        foreach(UserData u in userdata) {
+        foreach (UserData u in userdata) {
             username = u.playerName;
             game1 = u.hasGame1;
             game2 = u.hasGame2;
@@ -57,32 +56,30 @@ public class MainMenuControlinator : MonoBehaviour{
             bgmVolume = u.bgmVolume;
             sfxVolume = u.sfxVolume;
         }
+
+        if (!MusicPlayer.instance.IsTrackPlaying) {
+            MusicPlayer.instance.PlayTrack();
+        }
+    }
+	void Start(){
         isPopupWindowsShown = false;
         isSelectUserShown = false;
         isAudioSettingsShown = false;
         isExitPopupShown = false;
         isLevelSelectShown = false;
+        gameToRun = 0;
 
-        PopupWindows.SetActive(isPopupWindowsShown);
-        SelectUserPopup.SetActive(isSelectUserShown);
-        AudioSettingsPopup.SetActive(isAudioSettingsShown);
+        popupWindows.SetActive(isPopupWindowsShown);
         ExitPopup.SetActive(isExitPopupShown);
+        tutorials.SetActive(false);
+        laserTutorial.SetActive(false);
 
         audioSettings = AudioSettingsPopup.GetComponent<AudioSettingsHandleinator>();
-        //audioSettings.BGMSlider.value = bgmVolume;
-        //audioSettings.SFXSlider.value = sfxVolume;
-
+        AudioSettingsPopup.SetActive(isAudioSettingsShown);
         MusicPlayer.instance.SetVolume(bgmVolume);
-        MusicPlayer.instance.PlayTrack();
-        /*if (audioManager == null) {
-            audioManager = FindObjectOfType<AudioManager>();
-            DontDestroyOnLoad(audioManager);
-        }
-        if(musicPlayer = null) {
-            musicPlayer = FindObjectOfType<MusicPlayer>();
-            DontDestroyOnLoad(musicPlayer); //"LCB_Milkyway_Tea_Shop_noAmb_Loop"
-
-        }*/
+        AudioVariables audioVars = FindObjectOfType<AudioVariables>();
+        audioVars.SFXVolume = sfxVolume;
+        audioVars.BGMVolume = bgmVolume;
     }
 
     void Update(){
@@ -93,8 +90,7 @@ public class MainMenuControlinator : MonoBehaviour{
 
     public void RunGame1() {
         Debug.Log("Running ping pong");
-        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
-        SceneManager.LoadScene("PingPong");
+        ShowTutorial("PING PONG", "Game ini cocok dimainkan oleh dua orang. Masing-masing pemain harus menggeser balok untuk memantulkan bola sehingga masuk ke gawang pemain lainnya. Pemain pertama yang mencapai 5 poin adalah pemenangnya!", 1);
     }
     public void RunGame2() {
         Debug.Log("Selecting laser level");
@@ -113,7 +109,7 @@ public class MainMenuControlinator : MonoBehaviour{
     }
     public void RunGame5() {
         Debug.Log("Running game 5");
-        audioManager.Play("button-click-1", volume: sfxVolume, loop: false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         SceneManager.LoadScene("Laser4");
     }
     public void RunGame6() {
@@ -123,13 +119,11 @@ public class MainMenuControlinator : MonoBehaviour{
     }
     public void RunGame7() {
         Debug.Log("Running sequence");
-        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
-        SceneManager.LoadScene("Sequence");
+        ShowTutorial("MENGHAFAL POLA", "Dalam game ini kamu akan melihat beberapa pola warna, hafalkan dan tunggu giliranmu untuk bermain. Pencet panah berwarna sesuai dengan pola yang kamu ingat dan capai skor paling tinggi!", 7);
     }
     public void RunGame8() {
         Debug.Log("Running sorting");
-        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
-        SceneManager.LoadScene("Sorting");
+        ShowTutorial("RANTAI MAKANAN", "Di sawah, terdapat berbagai macam makhluk hidup. Makhluk hidup membutuhkan makanan untuk bertahan hidup. Mari kita urutkan rantai makanan dari bawah ke atas!", 8);
     }
     public void RunGame9() {
         Debug.Log("Running game 9");
@@ -140,7 +134,7 @@ public class MainMenuControlinator : MonoBehaviour{
 
     public void PopupWindowsToggle() {
         isPopupWindowsShown = !isPopupWindowsShown;
-        PopupWindows.SetActive(isPopupWindowsShown);
+        popupWindows.SetActive(isPopupWindowsShown);
         AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
     public void AudioSettingsToggle() {
@@ -172,9 +166,47 @@ public class MainMenuControlinator : MonoBehaviour{
         ExitPopup.SetActive(isExitPopupShown);
         AudioManager.instance.Play("vs-pop-4", volume: sfxVolume, loop: false);
     }
-    private void ShowTutorial(string title, string tutorial) {
+    public void ShowTutorial(string title, string tutorial, int GTR) {
+        popupWindows.SetActive(true);
+        tutorials.SetActive(true);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
         titleTxt.text = title;
         tutorialTxt.text = tutorial;
+        gameToRun = GTR;
+	}
+    public void ShowLaserTutorial() {
+        popupWindows.SetActive(true);
+        laserTutorial.SetActive(true);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
+
+    }
+    public void HideTutorial() {
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
+        popupWindows.SetActive(false);
+        tutorials.SetActive(false);
+        gameToRun = 0;
+    }
+    public void HideLaserTutorial() {
+        popupWindows.SetActive(false);
+        laserTutorial.SetActive(false);
+        AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
+    }
+    public void TutorialRunGame() {
+        popupWindows.SetActive(false);
+        tutorials.SetActive(false);
+        switch (gameToRun) {
+            case 1:
+                AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
+                SceneManager.LoadScene("PingPong"); break;
+            case 7:
+                AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
+                SceneManager.LoadScene("Sequence"); break;
+            case 8:
+                AudioManager.instance.Play("button-click-1", volume: sfxVolume, loop: false);
+                SceneManager.LoadScene("Sorting"); break;
+            default: Debug.LogWarning("No game to run!");
+                break;
+        }
 	}
     public void QuitApp() {
         Application.Quit();

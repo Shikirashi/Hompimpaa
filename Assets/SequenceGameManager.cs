@@ -14,7 +14,6 @@ public class SequenceGameManager : MonoBehaviour
 	GameObject correctImg, wrongImg;
 	[SerializeField]
 	TextMeshProUGUI levelText, yourTurn;
-	public static AudioManager audioManager;
 
 	Material upMat;
 	Material rightMat;
@@ -50,10 +49,11 @@ public class SequenceGameManager : MonoBehaviour
 
 		DisableAll();
 		levelText.text = "Level: " + (sequenceCount - 2).ToString();
-		yourTurn.gameObject.SetActive(false);
+		//yourTurn.gameObject.SetActive(false);
+		yourTurn.text = "Tunggu...";
 
-		if(audioManager == null) {
-			audioManager = FindObjectOfType<AudioManager>();
+		if(AudioManager.instance == null) {
+			AudioManager.instance = FindObjectOfType<AudioManager>();
 		}
 	}
 
@@ -164,14 +164,14 @@ public class SequenceGameManager : MonoBehaviour
 	void IsCorrect() {
 		correctImg.SetActive(true);
 		wrongImg.SetActive(false);
-		yourTurn.gameObject.SetActive(false);
-		audioManager.Play("confirm-button", loop: false);
+		yourTurn.text = "Tunggu...";
+		AudioManager.instance.Play("confirm-button", loop: false);
 	}
 
 	void IsWrong() {
 		correctImg.SetActive(false);
 		wrongImg.SetActive(true);
-		audioManager.Play("wrong-answer", loop: false);
+		AudioManager.instance.Play("wrong-answer", loop: false);
 	}
 
 	void ResetImg() {
@@ -214,7 +214,7 @@ public class SequenceGameManager : MonoBehaviour
 				case 4: EnableDown(); break;
 				default: EnableAll(); break;
 			}
-			audioManager.Play("vs-pop-4", loop: false);
+			AudioManager.instance.Play("vs-pop-4", loop: false);
 			yield return new WaitForSeconds(sequenceDelay);
 			DisableAll();
 			//play sound to signify player's turn
@@ -224,12 +224,12 @@ public class SequenceGameManager : MonoBehaviour
 		wait = 2f * sequenceCount;
 		startWaiting = true;
 		isPlaying = true;
-		yourTurn.gameObject.SetActive(true);
+		yourTurn.text = "Giliranmu!";
 		ResetImg();
 	}
 
 	void PressUp() {
-		audioManager.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", loop: false);
 		StopAllCoroutines();
 		answer.Add(1);
 		StartCoroutine("PlayUp");
@@ -238,7 +238,7 @@ public class SequenceGameManager : MonoBehaviour
 	}
 
 	void PressRight() {
-		audioManager.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", loop: false);
 		StopAllCoroutines();
 		answer.Add(2);
 		StartCoroutine("PlayRight");
@@ -247,7 +247,7 @@ public class SequenceGameManager : MonoBehaviour
 	}
 
 	void PressLeft() {
-		audioManager.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", loop: false);
 		StopAllCoroutines();
 		answer.Add(3);
 		StartCoroutine("PlayLeft");
@@ -256,7 +256,7 @@ public class SequenceGameManager : MonoBehaviour
 	}
 
 	void PressDown() {
-		audioManager.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", loop: false);
 		StopAllCoroutines();
 		answer.Add(4);
 		StartCoroutine("PlayDown");

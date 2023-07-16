@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using CarterGames.Assets.AudioManager;
 
 public class LaserGameManager : MonoBehaviour{
     [SerializeField]
     GameObject pauseButton, pausePanel, winPanel;
+    AudioVariables audioVars;
 
     void Start(){
+        audioVars = FindObjectOfType<AudioVariables>();
         pauseButton.SetActive(true);
         pausePanel.SetActive(false);
         winPanel.SetActive(false);
@@ -38,6 +41,7 @@ public class LaserGameManager : MonoBehaviour{
 
     public void ClearLevel() {
         Time.timeScale = 1f;
+        AudioManager.instance.Play("level-win", volume: audioVars.SFXVolume, loop: false);
         pauseButton.SetActive(false);
         pausePanel.SetActive(false);
         winPanel.SetActive(true);

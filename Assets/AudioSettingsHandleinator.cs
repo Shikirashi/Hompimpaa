@@ -11,6 +11,10 @@ public class AudioSettingsHandleinator : MonoBehaviour{
 		mainMenu = FindObjectOfType<MainMenuControlinator>();
 		BGMSlider.value = mainMenu.bgmVolume;
 		SFXSlider.value = mainMenu.sfxVolume;
+		MusicPlayer.instance.SetVolume(mainMenu.bgmVolume);
+		AudioVariables audioVars = FindObjectOfType<AudioVariables>();
+		audioVars.SFXVolume = SFXSlider.value;
+		audioVars.BGMVolume = BGMSlider.value;
 	}
     public void setBGMVolume() {
 		mainMenu.bgmVolume = BGMSlider.value;

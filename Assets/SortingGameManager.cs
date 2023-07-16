@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using CarterGames.Assets.AudioManager;
 
 public class SortingGameManager : MonoBehaviour{
-    [SerializeField]
-    GameObject pauseButton, pausePanel, winPanel;
-    public float minimumDistance;
+    [SerializeField] GameObject pauseButton, pausePanel, winPanel, losePanel;
+    [SerializeField] float minimumDistance, loseDelay;
     public GameObject ImageParent;
     [SerializeField] int itemAmount;
     [SerializeField] DragNDrop[] spawnItems;
     [SerializeField] ImageSpawner[] spawnSpots;
     List<Transform> items = new List<Transform>();
     List<Transform> spots = new List<Transform>();
+    AudioVariables audioVars;
     void Start() {
+        audioVars = FindObjectOfType<AudioVariables>();
         spawnItems = FindObjectsOfType<DragNDrop>();
         spawnSpots = FindObjectsOfType<ImageSpawner>();
         SortImages();
@@ -72,12 +74,6 @@ public class SortingGameManager : MonoBehaviour{
 		}
     }
 
-    void SwapInt(int a, int b) {
-        int x = a;
-        a = b;
-        b = x;
-	}
-
     public void PauseGame() {
         Debug.Log("Pausing game");
         pauseButton.SetActive(false);
@@ -103,10 +99,13 @@ public class SortingGameManager : MonoBehaviour{
 
     public void CheckOrder() {
         //checks order of images
+        AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
         SortImages();
 		for (int i = 0; i < spawnItems.Length; i++) {
             if (spawnItems[i].itemIndex != i + 1) {
                 Debug.Log("order wrong");
+                StopAllCoroutines();
+                StartCoroutine(Salah());
                 return;
 			}
         }
@@ -116,8 +115,17 @@ public class SortingGameManager : MonoBehaviour{
 
     public void ClearLevel() {
         Time.timeScale = 1f;
+        AudioManager.instance.Play("level-win", volume: audioVars.SFXVolume, loop: false);
         pauseButton.SetActive(false);
         pausePanel.SetActive(false);
         winPanel.SetActive(true);
+    }
+
+    IEnumerator Salah() {
+        Debug.Log("Showing salah");
+        losePanel.SetActive(true);
+        AudioManager.instance.Play("wrong-answer", volume: audioVars.SFXVolume, loop: false);
+        yield return new WaitForSeconds(loseDelay);
+        losePanel.SetActive(false);
     }
 }
