@@ -21,6 +21,7 @@ public static class SaveData {
         return res;
     }
     private static string GetPath(string filename) {
+        Debug.Log("Save location: " + Application.persistentDataPath + "/Saves/" + filename);
         return Application.persistentDataPath + "/Saves/" + filename;
 	}
     private static void WriteFile(string path, string content) {

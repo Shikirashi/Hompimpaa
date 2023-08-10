@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PingPongManager : MonoBehaviour{
     [SerializeField]
     GameObject pauseButton, pausePanel, winPanel;
+    [SerializeField]
+    TextMeshProUGUI pemenangText;
 
     void Start() {
         pauseButton.SetActive(true);
@@ -36,10 +39,11 @@ public class PingPongManager : MonoBehaviour{
         SceneManager.LoadScene("Main");
     }
 
-    public void ClearLevel() {
-        Time.timeScale = 1f;
+    public void ClearLevel(string pemenang) {
+        Time.timeScale = 0f;
         pauseButton.SetActive(false);
         pausePanel.SetActive(false);
+        pemenangText.text = pemenang;
         winPanel.SetActive(true);
     }
 }

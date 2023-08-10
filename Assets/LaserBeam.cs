@@ -27,6 +27,15 @@ public class LaserBeam{
 		CastRay(pos, dir, laser);
 	}
 
+	void UpdateLaser() {
+		int count = 0;
+		laser.positionCount = laserIndices.Count;
+		foreach (Vector3 idx in laserIndices) {
+			laser.SetPosition(count, idx);
+			count++;
+		}
+	}
+
 	void CastRay(Vector3 pos, Vector3 dir, LineRenderer laser) {
 		laserIndices.Add(pos);
 
@@ -41,16 +50,7 @@ public class LaserBeam{
 		}
 	}
 
-	void UpdateLaser() {
-		int count = 0;
-		laser.positionCount = laserIndices.Count;
-		foreach(Vector3 idx in laserIndices) {
-			laser.SetPosition(count, idx);
-			count++;
-		}
-	}
-
-	void CheckHit(RaycastHit hitInfo, Vector3 dir, LineRenderer laser) {
+	private void CheckHit(RaycastHit hitInfo, Vector3 dir, LineRenderer laser) {
 		if (hitInfo.collider.gameObject.tag == "Mirror") {
 			Vector3 pos = hitInfo.point;
 			Vector3 direction = Vector3.Reflect(dir, hitInfo.normal);

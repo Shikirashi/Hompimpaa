@@ -22,10 +22,12 @@ MonoBehaviour:
   library:
   - key: LCB_Milkyway_Tea_Shop_noAmb_Loop
     value: {fileID: 8300000, guid: 337b86c785c8649ba88cddd3b545fefe, type: 3}
-  - key: 186669__fordps3__computer-boop
-    value: {fileID: 8300000, guid: 9be3f9e78a25655489bce893b8bc753f, type: 3}
   - key: back-button
     value: {fileID: 8300000, guid: 7feca5566558ea94fa259f269d21bb9b, type: 3}
+  - key: boop
+    value: {fileID: 8300000, guid: 9be3f9e78a25655489bce893b8bc753f, type: 3}
+  - key: bounce
+    value: {fileID: 8300000, guid: 7235a3578dcefeb44a56d31b7e771692, type: 3}
   - key: button-click-1
     value: {fileID: 8300000, guid: 735f867972ce381449aa1941f855e21f, type: 3}
   - key: confirm-button

@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using CarterGames.Assets.AudioManager;
 
 public class BallScript : MonoBehaviour{
     [SerializeField]
     private int speed, delay;
+    [SerializeField] private float velocity;
     private int x, y;
     private int player1Score, player2Score;
     private Rigidbody2D rb;
+    PingPongManager pingpong;
+    AudioVariables audioVars;
 
     public TextMeshProUGUI score1;
     public TextMeshProUGUI score2;
-    void Start(){
+    void Start() {
+        audioVars = FindObjectOfType<AudioVariables>();
+        pingpong = FindObjectOfType<PingPongManager>();
         rb = GetComponent<Rigidbody2D>();
         x = 1;
         y = 1;
@@ -20,7 +26,8 @@ public class BallScript : MonoBehaviour{
         player2Score = 0;
         score1.text = player1Score.ToString();
         score2.text = player2Score.ToString();
-        StartCoroutine("StartBall");
+        StartCoroutine("StartBall"); 
+        velocity = rb.velocity.magnitude;
     }
 
     private IEnumerator StartBall() {
@@ -29,6 +36,9 @@ public class BallScript : MonoBehaviour{
         yield return new WaitForSeconds(delay);
 
         int rand = Random.Range(1, 5);
+        if (Application.platform == RuntimePlatform.WindowsEditor) {
+            rand = 6;
+        }
         switch (rand) {
             case 1:
                 x = -4;
@@ -45,6 +55,10 @@ public class BallScript : MonoBehaviour{
             case 4:
                 x = 4;
                 y = 2;
+                break;
+            case 6:
+                x = 4;
+                y = 0;
                 break;
             default:
                 x = 4;
@@ -65,12 +79,24 @@ public class BallScript : MonoBehaviour{
         }
         rb.velocity = new Vector2(0f, 0f);
         StopCoroutine("StartBall");
+        if(player1Score == 5) {
+            pingpong.ClearLevel("Pemain 1 menang!");
+		}
+        else if(player2Score == 5) {
+            pingpong.ClearLevel("Pemain 2 menang!");
+        }
+        AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
         StartCoroutine("StartBall");
     }
 
 	private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.tag == "Player") {
-            rb.AddForce(rb.velocity * 2f, ForceMode2D.Force);
+            Debug.Log("Bounce off player");
+            if(rb.velocity.magnitude < 20f) {
+                rb.AddForce(rb.velocity * 5f, ForceMode2D.Force);
+            }
+            AudioManager.instance.Play("bounce", volume: audioVars.SFXVolume, loop: false);
+            velocity = rb.velocity.magnitude;
         }
     }
 }

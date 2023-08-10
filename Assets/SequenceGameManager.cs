@@ -11,9 +11,12 @@ public class SequenceGameManager : MonoBehaviour
 	[SerializeField]
 	GameObject upArrow, rightArrow, leftArrow, downArrow;
 	[SerializeField]
-	GameObject correctImg, wrongImg;
+	GameObject pauseButton, pausePanel, losePanel;
 	[SerializeField]
-	TextMeshProUGUI levelText, yourTurn;
+	GameObject correctImg, wrongImg, tungguImg, mulaiImg;
+	[SerializeField]
+	TextMeshProUGUI levelText, polaCount, loseText;
+	AudioVariables audioVars;
 
 	Material upMat;
 	Material rightMat;
@@ -33,14 +36,18 @@ public class SequenceGameManager : MonoBehaviour
 	Ray ray;
 	RaycastHit hit;
 	void Start() {
+		audioVars = FindObjectOfType<AudioVariables>();
 		isRandomized = false;
 		playingSequence = false;
 		startWaiting = false;
+		isPlaying = true;
 		ResetImg();
 		arrows.Add(upArrow);
 		arrows.Add(rightArrow);
 		arrows.Add(leftArrow);
 		arrows.Add(downArrow);
+		mulaiImg.SetActive(false);
+		tungguImg.SetActive(true);
 
 		upMat = upArrow.GetComponent<MeshRenderer>().material;
 		rightMat = rightArrow.GetComponent<MeshRenderer>().material;
@@ -49,8 +56,9 @@ public class SequenceGameManager : MonoBehaviour
 
 		DisableAll();
 		levelText.text = "Level: " + (sequenceCount - 2).ToString();
+		polaCount.text = "Panjang pola: " + sequenceCount;
 		//yourTurn.gameObject.SetActive(false);
-		yourTurn.text = "Tunggu...";
+		//yourTurn.text = "Tunggu...";
 
 		if(AudioManager.instance == null) {
 			AudioManager.instance = FindObjectOfType<AudioManager>();
@@ -71,11 +79,11 @@ public class SequenceGameManager : MonoBehaviour
 			RandomizeSequence();
 		}
 		if (startWaiting) {
-			if (count2 < wait) {
-				count2 += Time.deltaTime;
+			if (isPlaying) {
 				//mouse control
-				if (isPlaying) {
-					if(Application.platform == RuntimePlatform.WindowsEditor) {
+				if (count2 < wait) {
+					count2 += Time.deltaTime;
+					if (Application.platform == RuntimePlatform.WindowsEditor) {
 						if (Input.GetMouseButtonDown(0)) {
 							Debug.Log("Clicked");
 							ray = new Ray(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward);
@@ -132,6 +140,12 @@ public class SequenceGameManager : MonoBehaviour
 						}
 					}
 				}
+				else {
+					Debug.Log("Time's up!");
+					isPlaying = false;
+					loseText.text = "Waktu habis!";
+					LoseGame();
+				}
 
 				if (answer.Count == sequenceCount) {
 					if (CheckAnswer(answer, sequence)) {
@@ -144,6 +158,7 @@ public class SequenceGameManager : MonoBehaviour
 						count2 = 0f;
 						sequenceCount++;
 						levelText.text = "Level: " + (sequenceCount - 2).ToString();
+						polaCount.text = "Panjang pola: " + sequenceCount;
 						sequenceDelay -= 0.15f;
 						sequenceDelay = Mathf.Clamp(sequenceDelay, 0.15f, float.MaxValue);
 						//DisableAll();
@@ -154,9 +169,6 @@ public class SequenceGameManager : MonoBehaviour
 					//signify whether player is correct or false
 				}
 			}
-			else {
-				Debug.Log("Time's up!");
-			}
 		}
 
 	}
@@ -164,14 +176,17 @@ public class SequenceGameManager : MonoBehaviour
 	void IsCorrect() {
 		correctImg.SetActive(true);
 		wrongImg.SetActive(false);
-		yourTurn.text = "Tunggu...";
-		AudioManager.instance.Play("confirm-button", loop: false);
+		polaCount.text = "Tunggu...";
+		tungguImg.SetActive(true);
+		mulaiImg.SetActive(false);
+		AudioManager.instance.Play("confirm-button", volume: audioVars.SFXVolume, loop: false);
 	}
 
 	void IsWrong() {
 		correctImg.SetActive(false);
 		wrongImg.SetActive(true);
-		AudioManager.instance.Play("wrong-answer", loop: false);
+		loseText.text = "Yah kamu salah";
+		LoseGame();
 	}
 
 	void ResetImg() {
@@ -202,6 +217,14 @@ public class SequenceGameManager : MonoBehaviour
 		isRandomized = true;
 	}
 
+	void LoseGame() {
+		Time.timeScale = 1f;
+		AudioManager.instance.Play("wrong-answer", volume: audioVars.SFXVolume, loop: false);
+		pauseButton.SetActive(false);
+		pausePanel.SetActive(false);
+		losePanel.SetActive(true);
+	}
+
 	IEnumerator PlaySequence() {
 		playingSequence = true;
 		correctImg.SetActive(false);
@@ -214,7 +237,7 @@ public class SequenceGameManager : MonoBehaviour
 				case 4: EnableDown(); break;
 				default: EnableAll(); break;
 			}
-			AudioManager.instance.Play("vs-pop-4", loop: false);
+			AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
 			yield return new WaitForSeconds(sequenceDelay);
 			DisableAll();
 			//play sound to signify player's turn
@@ -224,12 +247,13 @@ public class SequenceGameManager : MonoBehaviour
 		wait = 2f * sequenceCount;
 		startWaiting = true;
 		isPlaying = true;
-		yourTurn.text = "Giliranmu!";
+		tungguImg.SetActive(false);
+		mulaiImg.SetActive(true);
 		ResetImg();
 	}
 
 	void PressUp() {
-		AudioManager.instance.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
 		StopAllCoroutines();
 		answer.Add(1);
 		StartCoroutine("PlayUp");
@@ -238,7 +262,7 @@ public class SequenceGameManager : MonoBehaviour
 	}
 
 	void PressRight() {
-		AudioManager.instance.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
 		StopAllCoroutines();
 		answer.Add(2);
 		StartCoroutine("PlayRight");
@@ -247,7 +271,7 @@ public class SequenceGameManager : MonoBehaviour
 	}
 
 	void PressLeft() {
-		AudioManager.instance.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
 		StopAllCoroutines();
 		answer.Add(3);
 		StartCoroutine("PlayLeft");
@@ -256,7 +280,7 @@ public class SequenceGameManager : MonoBehaviour
 	}
 
 	void PressDown() {
-		AudioManager.instance.Play("vs-pop-4", loop: false);
+		AudioManager.instance.Play("vs-pop-4", volume: audioVars.SFXVolume, loop: false);
 		StopAllCoroutines();
 		answer.Add(4);
 		StartCoroutine("PlayDown");

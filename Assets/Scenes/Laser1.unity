@@ -696,7 +696,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d21a276b4eb53e488b8b0ffdb5f0d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  filename: 
   speed: 10
+  volume: 0
 --- !u!1 &906952865 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1041675639455708770, guid: 9c0cac7f2bea2ba47bb79e45e1ad8483, type: 3}
@@ -3131,6 +3133,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1554840876357157179, guid: c4868a7d4f0d13041a5e85f520937a2d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1554840877031629773, guid: c4868a7d4f0d13041a5e85f520937a2d, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5293999294646869971, guid: c4868a7d4f0d13041a5e85f520937a2d, type: 3}
       propertyPath: m_Name
       value: Pause
@@ -3218,6 +3228,10 @@ PrefabInstance:
     - target: {fileID: 5293999294646869975, guid: c4868a7d4f0d13041a5e85f520937a2d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154466125981826611, guid: c4868a7d4f0d13041a5e85f520937a2d, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4868a7d4f0d13041a5e85f520937a2d, type: 3}
@@ -3454,6 +3468,7 @@ MonoBehaviour:
   fullBattery: {fileID: 2100000, guid: f9749e23b34710c42bd95c2768063326, type: 2}
   isCharging: 0
   isFull: 0
+  isPlay: 0
 --- !u!4 &7192871755300542374
 Transform:
   m_ObjectHideFlags: 0

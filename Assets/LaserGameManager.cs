@@ -46,4 +46,8 @@ public class LaserGameManager : MonoBehaviour{
         pausePanel.SetActive(false);
         winPanel.SetActive(true);
     }
+
+    public void NextLevel() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 }

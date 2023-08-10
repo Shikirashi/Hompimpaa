@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour{
             }
         }
         else if (Application.platform == RuntimePlatform.WindowsEditor) {
-            //Debug.Log("No controls yet");
+            //Debug.Log("No controls yet player");
         }
         else if (Application.platform == RuntimePlatform.WindowsPlayer) {
             //Debug.Log("No controls yet player");

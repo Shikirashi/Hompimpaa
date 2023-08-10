@@ -9,9 +9,9 @@ using UnityEngine.SceneManagement;
 public class MainMenuControlinator : MonoBehaviour{
     [SerializeField] string filename;
     public AudioSettingsHandleinator audioSettings;
-
-    public GameObject popupWindows, AudioSettingsPopup, ExitPopup, LevelSelect, tutorials, laserTutorial;
-    public TextMeshProUGUI titleTxt, tutorialTxt;
+    public TMP_InputField inputNama;
+    public GameObject popupWindows, AudioSettingsPopup, ExitPopup, LevelSelect, tutorials, laserTutorial, nameInputPanel;
+    public TextMeshProUGUI titleTxt, tutorialTxt, haloPengguna;
 
     public bool isPopupWindowsShown;
     public bool isSelectUserShown;
@@ -73,6 +73,19 @@ public class MainMenuControlinator : MonoBehaviour{
         ExitPopup.SetActive(isExitPopupShown);
         tutorials.SetActive(false);
         laserTutorial.SetActive(false);
+        if (nameInputPanel != null) {
+            if (username != "") {
+                nameInputPanel.SetActive(false);
+                haloPengguna.text = "Halo, " + username + "!";
+            }
+            else {
+                popupWindows.SetActive(true);
+                nameInputPanel.SetActive(true);
+            }
+        }
+		else {
+            Debug.LogError("Name input is missing!");
+		}
 
         audioSettings = AudioSettingsPopup.GetComponent<AudioSettingsHandleinator>();
         AudioSettingsPopup.SetActive(isAudioSettingsShown);
@@ -86,6 +99,31 @@ public class MainMenuControlinator : MonoBehaviour{
 		if (Input.GetKeyDown(KeyCode.S)) {
             SaveToFile();
 		}
+    }
+
+    public void ChangeNamaPengguna() {
+        popupWindows.SetActive(true);
+        nameInputPanel.SetActive(true);
+    }
+
+    public void SetNamaPengguna() {
+        username = inputNama.text;
+        Debug.Log("Nama pengguna: " + username);
+        haloPengguna.text = "Halo, " + username + "!";
+        SaveToFile();
+        nameInputPanel.SetActive(false);
+        popupWindows.SetActive(false);
+    }
+
+    public void CancelNamaPengguna() {
+        string nama = inputNama.text;
+        if(nama == "") {
+            return;
+		}
+		else {
+            nameInputPanel.SetActive(false);
+            popupWindows.SetActive(false);
+        }
     }
 
     public void RunGame1() {
